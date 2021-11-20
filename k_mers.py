@@ -6,9 +6,11 @@ def list_of_frequent_words(Text, k):
     """
     Uses frequency_map_dictionary to return a list of most frequent words and their counts
     Gets the max value from the dict, and then captures all keys that have that value
+    Note:  Also works with 'frequency_map' because counter object IS a dictionary (a dictionary subclass)
     """
     words = []
     freq = frequency_map_dictionary(Text, k)
+    # freq = frequency_map(Text, k)
     m = max(freq.values())
     for key in freq:
         if freq[key] == m:
