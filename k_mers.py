@@ -65,7 +65,7 @@ def pattern_locator(Text, Pattern):
         if Text[i:i+len(Pattern)] == Pattern:
             count = count+1
             positions.append(i)
-    return count positions
+    return count, positions
 
 
 
