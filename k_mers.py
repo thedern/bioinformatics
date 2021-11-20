@@ -2,7 +2,7 @@ from collections import Counter
 import more_itertools
 
 
-def count_mers(Text, k):
+def frequency_map(Text, k):
     """
     Function takes in a string (Text) and mer length (k) and slides down the string finding repeating patterns
     returns a counter object containing a dictionary of pattern frequencies
@@ -17,7 +17,7 @@ def count_mers(Text, k):
   
 
 
-def PatternCount(Text, Pattern):
+def pattern_locator(Text, Pattern):
     count = 0
     """
     Function takes in a string (Text) and a desired substring (Pattern) and finds the frequency of the that Pattern within the Text
@@ -41,11 +41,11 @@ def PatternCount(Text, Pattern):
 def main():
     t = "ACAACTATGCATACTATCGGGAACTATCCT"
     # finds the frequency of a specific pattern
-    c = PatternCount(t, "ACTAT")
+    c = pattern_locator(t, "ACTAT")
     print(f"pattern count: {c}")
 
     # find all 5 mer length patterns
-    d = count_mers(t, 5)
+    d = frequency_map(t, 5)
     print(f"patterns found: {d}")
 
 
