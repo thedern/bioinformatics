@@ -2,6 +2,19 @@ from collections import Counter
 import more_itertools
 
 
+def list_of_frequent_words(Text, k):
+    """
+    Uses frequency_map_dictionary to return a list of most frequent words and their counts
+    Gets the max value from the dict, and then captures all keys that have that value
+    """
+    words = []
+    freq = frequency_map_dictionary(Text, k)
+    m = max(freq.values())
+    for key in freq:
+        if freq[key] == m:
+            words.append((key, m))
+    return words
+
 
 def frequency_map_dictionary(Text, k):
     """
