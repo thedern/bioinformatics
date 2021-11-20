@@ -2,6 +2,20 @@ from collections import Counter
 import more_itertools
 
 
+
+def frequency_map_dictionary(Text, k):
+    """
+    This version of the frequency map produces the same net result as the code in 'frequency_map', but does not use intertools.
+    The sliding window is produced vi index iteration.
+    """
+    freq = {}
+    n = len(Text)
+    for i in range(n-k+1):
+        Pattern = Text[i:i+k]
+        freq[Pattern] = freq.get(Pattern,0) + 1
+    return freq
+
+
 def frequency_map(Text, k):
     """
     Function takes in a string (Text) and mer length (k) and slides down the string finding repeating patterns
