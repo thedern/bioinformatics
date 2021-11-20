@@ -57,13 +57,15 @@ def pattern_locator(Text, Pattern):
     Stopping at index 7 since we are checking a 'window' 3 indexes at a time (in this example)
     as 7, 8, 9 are the last three indexes of a len 10 string
     """
+    positions = []
     for i in range(len(Text)-len(Pattern)+1):
         print(Text[i:i+len(Pattern)])
         # slicing indexes excludes upper bound
         # ex [0:3] == indexes 0, 1, 2
         if Text[i:i+len(Pattern)] == Pattern:
             count = count+1
-    return count
+            positions.append(i)
+    return count positions
 
 
 
