@@ -2,11 +2,16 @@ from collections import Counter
 import more_itertools
 
 
-def list_of_frequent_words(Text, k):
+def list_of_most_frequent_words(Text, k):
     """
     Uses frequency_map_dictionary to return a list of most frequent words and their counts
     Gets the max value from the dict, and then captures all keys that have that value
     Note:  Also works with 'frequency_map' because counter object IS a dictionary (a dictionary subclass)
+    
+    Text = string
+    K = int
+    return = list of tuples [('mers', counts)]
+    
     """
     words = []
     freq = frequency_map_dictionary(Text, k)
@@ -22,6 +27,11 @@ def frequency_map_dictionary(Text, k):
     """
     This version of the frequency map produces the same net result as the code in 'frequency_map', but does not use intertools.
     The sliding window is produced vi index iteration.
+    
+    Text = string
+    K = int
+    return = dict ('mers': counts)
+    
     """
     freq = {}
     n = len(Text)
@@ -41,12 +51,16 @@ def frequency_map(Text, k):
     The window length is the value of 'k' and moves down the string one index at a time (step=1), creating k-length windows
     A Counter is a container that keeps track of how many times equivalent values are added
     
+    Text = string
+    K = int
+    return = dict ('mers': counts)
+    
     """
     return Counter(("".join(mers) for mers in more_itertools.windowed(Text, k)))
   
 
 
-def pattern_locator(Text, Pattern):
+def pattern_counter(Text, Pattern):
     count = 0
     """
     Function takes in a string (Text) and a desired substring (Pattern) and finds the frequency of the that Pattern within the Text
@@ -56,6 +70,10 @@ def pattern_locator(Text, Pattern):
     Thus, if ((10 - 3) + 1) = 8, we are moving over indexes 0 - 7
     Stopping at index 7 since we are checking a 'window' 3 indexes at a time (in this example)
     as 7, 8, 9 are the last three indexes of a len 10 string
+    
+    Text = string
+    Pattern =string
+    count = int
     """
     positions = []
     for i in range(len(Text)-len(Pattern)+1):
@@ -72,7 +90,7 @@ def pattern_locator(Text, Pattern):
 def main():
     t = "ACAACTATGCATACTATCGGGAACTATCCT"
     # finds the frequency of a specific pattern
-    c = pattern_locator(t, "ACTAT")
+    c = pattern_counter(t, "ACTAT")
     print(f"pattern count: {c}")
 
     # find all 5 mer length patterns
