@@ -60,7 +60,7 @@ def frequency_map(Text, k):
   
 
 
-def pattern_counter(Text, Pattern):
+def pattern_counter(Pattern, Text):
     count = 0
     """
     Function takes in a string (Text) and a desired substring (Pattern) and finds the frequency of the that Pattern within the Text
@@ -90,7 +90,7 @@ def pattern_counter(Text, Pattern):
 def main():
     t = "ACAACTATGCATACTATCGGGAACTATCCT"
     # finds the frequency of a specific pattern
-    c = pattern_counter(t, "ACTAT")
+    c = pattern_counter("ACTAT", t)
     print(f"pattern count: {c}")
 
     # find all 5 mer length patterns
