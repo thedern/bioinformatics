@@ -57,6 +57,11 @@ def frequency_map(Text, k):
     
     """
     return Counter(("".join(mers) for mers in more_itertools.windowed(Text, k)))
+
+
+def nucleotide_array(symbol, text):
+    pass
+    
   
 
 
