@@ -23,7 +23,6 @@ def list_of_most_frequent_words(text, k):
 
 
 def frequency_map_dictionary(text, k):
-
     """
     This version of the frequency map produces the same net result as the code in 'frequency_map', but does not use intertools.
     The sliding window is produced vi index iteration.
@@ -93,6 +92,61 @@ def nucleotide_array(symbol, text):
         for i in range(n)
     }
 
+
+def faster_nucleotide_array(symbol, text):
+    """
+
+    more efficient algorithm for a nucleotide array.
+
+    :param symbol: nucleotide (a, t, c, g)
+    :type symbol: string
+    :param text: dna sequence
+    :type text: string
+    :return: dictionary of indexes and counts
+    :rtype: dict
+    """
+    array = {}
+    genome_len = len(text)
+    extended_genome = text + text[0:genome_len // 2]
+
+    """
+    # look at the first half of Genome to compute first array value
+    # Example: if 'A' is found 6 times in the half genome,  array key '0', (array[0])  = {0:6}
+    """
+    array[0] = pattern_counter(symbol, text[0:genome_len // 2])
+
+    for i in range(1, genome_len):
+        """
+        # the current index value will always be based on the previous index value but can change as we do our analysis
+        # we start our array with the number of symbols counted from position 0 for the length of the window
+        # Example:  {0:6, 1:6}
+        """
+        array[i] = array[i - 1]
+
+        """
+        # get and analyze first nucleotide in window based on current index, which is beginning of window
+        # if the first nucleotide is one we are looking for, we assume we loose it as we move one to the right by index
+        # therefore, subtract
+        # Example:  symbol 'A' window 3; [ATC]AGC => A[TCA]GC;  lost the first 'A' (minus -1)
+        """
+        beginning_nucleotide = extended_genome[i - 1]
+        if beginning_nucleotide == symbol:
+            array[i] = array[i] - 1
+
+        """
+        # get and analyze last nucleotide in window based on last index in window
+        # as index moves to the right, it increases by 1, thus we need to -1 to maintain correct window size as we loop
+        # if the nucleotide at the end of the window is one we are looking for, add it
+        # Example:  symbol 'A' window 3; [ATC]AGC => A[TCA]GC;  gained an 'A' at end of window (add +1)
+        """
+        ending_nucleotide = extended_genome[i + (genome_len // 2) - 1]
+        if ending_nucleotide == symbol:
+            array[i] = array[i] + 1
+
+        print(i, extended_genome[1:(genome_len // 2 + i)], symbol, ':', array[i])
+    return array
+
+
 def pattern_counter(pattern, text):
     """
     for any given pattern of nucleotides in the provided text, count how many times that pattern occurs
@@ -106,28 +160,24 @@ def pattern_counter(pattern, text):
     :rtype: int or tuple
     """
 
-    count = 0
-    # positions = []
-    for i in range(len(text) - len(pattern) + 1):
-        print(text[i:i + len(pattern)])
-        # slicing indexes excludes upper bound
-        # ex [0:3] == indexes 0, 1, 2
-        if text[i:i + len(pattern)] == pattern:
-            count += 1
-            # positions.append(i)
-    return count
-    # return count, positions
+    return sum(
+        text[i: i + len(pattern)] == pattern
+        for i in range(len(text) - len(pattern) + 1)
+    )
 
 
 def main():
-    t = "ACAACTATGCATACTATCGGGAACTATCCT"
+    t = "CCAACTATGCATACTATCGGGAACTATCCT"
     # finds the frequency of a specific pattern
-    c = pattern_counter("ACTAT", t)
-    print(f"pattern count: {c}")
+    # c = pattern_counter("ACTAT", t)
+    # print(f"pattern count: {c}")
 
     # find all 5 mer length patterns
-    d = frequency_map(t, 5)
-    print(f"patterns found: {d}")
+    # d = frequency_map(t, 5)
+    # print(f"patterns found: {d}")
+
+    x = faster_nucleotide_array("A", t)
+    print(x)
 
 
 if __name__ == "__main__":
