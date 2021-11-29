@@ -88,12 +88,10 @@ def nucleotide_array(symbol, text):
 
     n = len(text)
     extended_genome = text + text[0:n // 2]
-
     return {
         i: pattern_counter(symbol, extended_genome[i: i + (n // 2)])
         for i in range(n)
     }
-
 
 def pattern_counter(pattern, text):
     """
