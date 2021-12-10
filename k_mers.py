@@ -166,17 +166,116 @@ def pattern_counter(pattern, text):
     )
 
 
+def skew_array(genome):
+    """
+    traversed from ori to ter in the 5' → 3' direction and are thus called forward half-strands
+    traversed from ori to ter in the 3' → 5' direction and are thus called reverse half-strands
+    Determine if on the forward or reverse half strand by determining the difference between G and C
+    each forward half-strand has more guanine + 1
+    each reverse half-strand has more cytosine - 1
+
+    :param genome: dna
+    :type genome: string
+    :return: array of nucleotide counts
+    :rtype: dict
+    """
+    a = {0: 0}
+    for i in range(len(genome)):
+        if genome[i] in ['A', 'T']:
+            a[i + 1] = a[i]
+        if genome[i] == 'G':
+            a[i + 1] = a[i] + 1
+        if genome[i] == 'C':
+            a[i + 1] = a[i] - 1
+
+    return list(a.values())
+
+
+def minimum_skew(Genome):
+    """
+    locating ori: it should be found where the skew array attains a minimum.
+    :param Genome: dna
+    :type Genome: text
+    :return: list positions where G is lowest, indicating ori
+    :rtype: list
+    """
+
+    skew_list = skew_array(Genome)
+    m = min(skew_list)
+    return [i for i in range(len(skew_list)) if skew_list[i] == m]
+
+
+def hamming_distance(p, q):
+    # ham = 0
+    # for x, y in zip(p, q):
+    #     if x is not y:
+    #         ham += 1
+    # return ham
+    return sum(x is not y for x, y in zip(p, q))
+
+
+def approximate_pattern_matching(text, pattern, d):
+    """
+    Returns a list of positions (indexes) within the text where approximate pattern is found.
+    Approximate pattern is any pattern less than or equal to the hamming distance of d
+    Uses pattern_counter's algorithm
+
+    :param pattern: nucleotide pattern
+    :type pattern: dna
+    :param text: string
+    :type text: string
+    :param d: max hamming distance
+    :type d: int
+    :return: list of indexes of possible pattern matches
+    :rtype: list
+    """
+
+    return [
+        i
+        for i in range(len(text) - len(pattern) + 1)
+        if hamming_distance(text[i: i + len(pattern)], pattern) <= d
+    ]
+
+
+def approximate_pattern_count(pattern, text, d):
+    """
+    Return the number of approximate pattern matches for pattern in text with hamming distance <= d
+    Uses pattern_counter's algorithm
+
+    :param pattern: nucleotide pattern
+    :type pattern: dna
+    :param text: string
+    :type text: string
+    :param d: max hamming distance
+    :type d: int
+    :return: number of possible pattern matches
+    :rtype: int
+    """
+    return sum(
+        hamming_distance(text[i: i + len(pattern)], pattern) <= d
+        for i in range(len(text) - len(pattern) + 1)
+    )
+
+
 def main():
-    t = "CCAACTATGCATACTATCGGGAACTATCCT"
+    t = "CATTCCAGTACTTCGATGATGGCGTGAAGA"
     # finds the frequency of a specific pattern
     # c = pattern_counter("ACTAT", t)
     # print(f"pattern count: {c}")
+
+    a = 'TGACCCGTTATGCTCGAGTTCGGTCAGAGCGTCATTGCGAGTAGTCGTTTGCTTTCTCAAACTCC'
+    b = 'GAGCGATTAAGCGTGACAGCCCCAGGGAACCCACAAAACGTGATCGCAGTCCATCCGATCATACA'
+    print(hamming_distance(a, b))
+
 
     # find all 5 mer length patterns
     # d = frequency_map(t, 5)
     # print(f"patterns found: {d}")
 
-    x = faster_nucleotide_array("A", t)
+    # x = faster_nucleotide_array("A", t)
+    # print(x)
+    #
+    x = minimum_skew(t)
     print(x)
 
 
